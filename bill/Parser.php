@@ -30,10 +30,10 @@ class Parser
                 $obj->{'相關附件'} = array();
                 preg_match_all('/<a class="[^"]*"[^>]*href="([^"]*)"\s+title="([^"]*)"/', $doc->saveHTML($tr_dom), $matches);
                 foreach ($matches[0] as $idx => $m) {
-                    $obj->{'相關附件'}[] = array(
-                        '網址' => trim($matches[1][$idx]),
-                        '名稱' => trim($matches[2][$idx]),
-                    );
+                    $o = new StdClass;
+                    $o->{'網址'} = trim($matches[1][$idx]);
+                    $o->{'名稱'} = trim($matches[2][$idx]);
+                    $obj->{'相關附件'}[] = $o;
                 }
             } else if ($key == '關連議案') {
                 $obj->{'關連議案'} = array();
@@ -148,7 +148,7 @@ class Parser
                     $text = trim($dl_dom->getElementsByTagName('dd')->item(0)->getElementsByTagName('h5')->item(0)->nodeValue);
                     if ($text == '') {
                         // TODO: 委員會發文？
-                    } else if (preg_match('#^(.*) (\d+-\d+-\d*)$#', $text, $matches)) {
+                    } else if (preg_match('#^(.*) (\d*-.*)$#', $text, $matches)) {
                         $p->{'會期'} = $matches[2];
                         $p->{'院會/委員會'} = trim($matches[1]);
                     } elseif (preg_match('#^[^\s]+委員會$#u', trim($text))) {
