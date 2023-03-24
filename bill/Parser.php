@@ -2,6 +2,16 @@
 
 class Parser
 {
+    public static function parsePerson($person)
+    {
+        $persons = preg_split('#　　#u', $person);
+        $persons = array_map(function($s) {
+            return trim(str_replace('　', '', $s));
+        }, $persons);
+        $persons = array_filter($persons, 'strlen');
+        return $persons;
+    }
+
     public function parseOldBillDetail($billno, $doc)
     {
         $th_dom = $doc->getElementById('t1');
@@ -49,7 +59,7 @@ class Parser
             } else if ('提案人' == $key or '連署人' == $key) {
                 $obj->{$key} = '';
                 if (preg_match("/getLawMakerName\('([^']*)', '([^']*)'\);/", $doc->saveHTML($tr_dom), $matches)) {
-                    $obj->{$key} = trim($matches[2]);
+                    $obj->{$key} = Parser::parsePerson(trim($matches[2]));
                 }
             } else if ('議案流程' == $key) {
                 $obj->{'議案流程'} = array();
@@ -151,7 +161,7 @@ class Parser
                     } else if (preg_match('#^(.*) (\d*-.*)$#', $text, $matches)) {
                         $p->{'會期'} = $matches[2];
                         $p->{'院會/委員會'} = trim($matches[1]);
-                    } elseif (preg_match('#^[^\s]+委員會$#u', trim($text))) {
+                    } elseif (in_array($text, ['議事處', '資訊處']) or preg_match('#^[^\s]+委員會$#u', trim($text))) {
                         $p->{'院會/委員會'} = trim($text);
                     } else {
                         throw new Exception("unknown {$billno}: wrong text {$text}");
