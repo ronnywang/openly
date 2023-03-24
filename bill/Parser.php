@@ -2,6 +2,20 @@
 
 class Parser
 {
+    public static function getListFromWeb()
+    {
+        $content = file_get_contents('https://lydata.s3.ronny.tw/bill-html/?C=M;O=A');
+        $doc = new DOMDocument;
+        @$doc->loadHTML($content);
+        foreach ($doc->getElementsByTagName('tr') as $tr_dom) {
+            $filename = $tr_dom->getElementsByTagName('a')->item(0)->nodeValue;
+            if (!strpos($filename, '.gz')) {
+                continue;
+            }
+            yield [$filename, strtotime($tr_dom->getElementsByTagName('td')->item(2)->nodeValue)];
+        }
+    }
+
     public static function parsePerson($person)
     {
         $persons = preg_split('#　　#u', $person);
