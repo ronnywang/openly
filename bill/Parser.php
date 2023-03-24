@@ -26,7 +26,7 @@ class Parser
         return $persons;
     }
 
-    public function parseOldBillDetail($billno, $doc)
+    public static function parseOldBillDetail($billno, $doc)
     {
         $th_dom = $doc->getElementById('t1');
         $tbody_dom = $th_dom->parentNode;
@@ -107,7 +107,7 @@ class Parser
         return $obj;
     }
 
-    public function parseBillDetail($billno, $content)
+    public static function parseBillDetail($billno, $content)
     {
         $doc = new DOMDocument;
         $content = str_replace('<head>', '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $content);
