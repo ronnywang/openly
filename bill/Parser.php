@@ -22,7 +22,7 @@ class Parser
         $persons = array_map(function($s) {
             return trim(str_replace('　', '', $s));
         }, $persons);
-        $persons = array_filter($persons, 'strlen');
+        $persons = array_values(array_filter($persons, 'strlen'));
         return $persons;
     }
 
