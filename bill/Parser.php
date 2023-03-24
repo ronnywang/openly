@@ -149,6 +149,12 @@ class Parser
                     $b->{'議案名稱'} = $a_dom->nodeValue;
                     $obj->{'關連議案'}[] = $b;
                 }
+            } else if (in_array($h3_dom->nodeValue, ['提案人', '連署人'])) {
+                $type = $h3_dom->nodeValue;
+                $obj->{$type} = [];
+                foreach ($h3_dom->parentNode->getElementsByTagName('a') as $a_dom) {
+                    $obj->{$type}[] = $a_dom->nodeValue;
+                }
             } else if ($h3_dom->nodeValue == '審議進度') {
                 $dom = $h3_dom->parentNode;
                 foreach ($dom->getElementsByTagName('dl') as $dl_dom) {
