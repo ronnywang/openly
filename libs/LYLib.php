@@ -68,9 +68,9 @@ class LYLib
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         if ($method != 'GET') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-            if (!is_null($data)) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            }
+        }
+        if (!is_null($data)) {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
         $content = curl_exec($curl);
         curl_close($curl);
