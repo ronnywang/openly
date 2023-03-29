@@ -144,9 +144,7 @@ class LYLib
             if ($obj[0] == 'attachments') {
                 $attachment = $obj[1];
                 $img_name = explode('_html_', $attachment->file_name)[1];
-                file_put_contents(__DIR__ . '/picfile/' . $base . '-' . $img_name, base64_decode($attachment->content));
-                S3Lib::put(__DIR__ . "/picfile/{$basename}-{$img_name}", "data/picfile/{$basename}-{$img_name}");
-                unlink(__DIR__ . "/picfile/{$basename}-{$img_name}");
+                file_put_contents(__DIR__ . '/../gazette/picfile/' . $base . '-' . $img_name, base64_decode($attachment->content));
 
                 $images->{$img_name} = true;
             } elseif ($obj[0] == 'content') {
