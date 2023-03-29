@@ -130,11 +130,11 @@ class LYLib
     public static function parseDoc($file)
     {
         $basename = basename($file);
-        if (file_exists(__DIR__ . "/htmlfile/{$basename}")) {
-            return json_decode(file_get_contents(__DIR__ . "/htmlfile/{$basename}"))->pics;
+        if (file_exists(__DIR__ . "/../gazette/htmlfile/{$basename}")) {
+            return json_decode(file_get_contents(__DIR__ . "/../gazette/htmlfile/{$basename}"))->pics;
         }
         error_log("parse doc {$file}");
-        $cmd = sprintf("curl -X POST -F %s -F \"output_type=html\" https://demo.sheethub.net/soffice/index2.php", escapeshellarg('file=@' . $file));
+        $cmd = sprintf("curl -X POST -F %s -F \"output_type=html\" https://soffice.ronny.tw/", escapeshellarg('file=@' . $file));
         $fp = popen($cmd, 'r');
         $base = basename($file);
         $images = new StdClass;
@@ -168,13 +168,13 @@ class LYLib
             }
         }
 
-        file_put_contents(__DIR__ . "/htmlfile/{$basename}", json_encode($ret));
+        file_put_contents(__DIR__ . "/../gazette/htmlfile/{$basename}", json_encode($ret));
         return $pics;
     }
 
     public static function parseTxtFile($basename)
     {
-        $docfile = __DIR__ . "/docfile/{$basename}";
+        $docfile = __DIR__ . "/../gazette/docfile/{$basename}";
         if (!file_exists("txtfile/" . $basename) or filesize("txtfile/{$basename}") == 0) {
             system(sprintf("antiword %s > %s", escapeshellarg($docfile), escapeshellarg("txtfile/{$basename}")));
         }
@@ -187,7 +187,7 @@ class LYLib
                 return;
             }
             $pics = LYLib::parseDoc($docfile);
-            $content = file_get_contents(__DIR__ . "/txtfile/{$basename}");
+            $content = file_get_contents(__DIR__ . "/../gazette/txtfile/{$basename}");
             $uploading_pics = [];
             $content = preg_replace_callback('/\[pic\]/', function($matches) use (&$pics, $basename, &$uploading_pics) {
                 if (!$pics) {
@@ -202,7 +202,7 @@ class LYLib
                 return "[pic:https://twlydata.s3.amazonaws.com/data/picfile/{$basename}-{$pic[0]}]";
             }, $content);
 
-            file_put_contents(__DIR__ . "/txtfile/{$basename}", $content);
+            file_put_contents(__DIR__ . "/../gazette/txtfile/{$basename}", $content);
         }
     }
 
