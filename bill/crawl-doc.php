@@ -46,6 +46,7 @@ while ($obj = json_decode(fgets($fp))) {
 			if (!file_exists($target) or filesize($target) < 100) {
 				error_log("{$docUrl} to {$values->billNo}-{$idx}.doc.gz");
 				$docUrl = str_replace('http://', 'https://', $docUrl);
+				$docUrl = str_replace('https://lci.ly.gov.tw/LyLCEW/', 'https://ppg.ly.gov.tw/ppg/download/', $docUrl);
 				system(sprintf("wget --inet4-only --timeout 10 -O %s %s", escapeshellarg("{$values->billNo}-{$idx}.doc"), escapeshellarg($docUrl)));
 				system("gzip " . escapeshellarg("{$values->billNo}-{$idx}.doc"));
 				rename("{$values->billNo}-{$idx}.doc.gz", $target);
@@ -66,7 +67,8 @@ while ($obj = json_decode(fgets($fp))) {
 			continue;
 		}
         error_log("{$docUrl} to {$values->billNo}.doc.gz");
-        $docUrl = str_replace('http://', 'https://', $docUrl);
+	$docUrl = str_replace('http://', 'https://', $docUrl);
+	$docUrl = str_replace('https://lci.ly.gov.tw/LyLCEW/', 'https://ppg.ly.gov.tw/ppg/download/', $docUrl);
         system(sprintf("wget --inet4-only --timeout 10 -O %s %s", escapeshellarg("{$values->billNo}.doc"), escapeshellarg($docUrl)));
         system("gzip " . escapeshellarg("{$values->billNo}.doc"));
         copy("{$values->billNo}.doc.gz", $target);
