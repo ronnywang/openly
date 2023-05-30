@@ -4,6 +4,10 @@ class Parser
 {
     public static function getListFromWeb()
     {
+	    foreach (glob(__DIR__ . "/bill-html/*.gz") as $f) {
+		    yield [basename($f), filemtime($f)];
+	    }
+return;
         $content = file_get_contents('https://lydata.s3.ronny.tw/bill-html/?C=M;O=A');
         $doc = new DOMDocument;
         @$doc->loadHTML($content);
