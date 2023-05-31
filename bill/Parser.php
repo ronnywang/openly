@@ -245,6 +245,7 @@ return;
                     // TODO: 審查會通過條文 (處理多筆字號)
                     unset($record->{'字號'});
                 }
+                //往上找 table 位置
                 $table_dom = $p_dom->parentNode;
                 while ('table' != $table_dom->nodeName) {
                     $table_dom = $table_dom->parentNode;
@@ -288,6 +289,9 @@ return;
                         }
                         $td_doms[] = $td_dom;
                     }
+                    if (!count($td_doms)) {
+                        continue;
+                    }
                     if ($only_first) {
                         $record->{'對照表標題'} = self::onlystr($td_doms[0]->nodeValue);
                     } else if (in_array(self::onlystr($td_doms[0]->nodeValue), array('審查會通過條文', '審查會通過', '審查會條文'))) {
@@ -312,7 +316,7 @@ return;
                         }
                     } else if (count($td_doms) >= 2 and trim($td_doms[0]->nodeValue) == '修正條文') {
                         $record->{'立法種類'} = '修正條文';
-                    } else if (count($td_doms) == 2 and trim($td_doms[0]->nodeValue) == '增訂條文') {
+                    } else if (count($td_doms) == 2 and self::onlystr($td_doms[0]->nodeValue) == '增訂條文') {
                         $record->{'立法種類'} = '增訂條文';
                     } else if (count($td_doms) == 3 and self::onlystr($td_doms[0]->nodeValue) == '條文' and trim($td_doms[1]->nodeValue) == '現行條文') {
                         $record->{'立法種類'} = '修正條文';
