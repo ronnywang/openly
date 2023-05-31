@@ -219,6 +219,12 @@ return;
 
         $doc = new DOMDocument;
         @$doc->loadHTML($content);
+        foreach ($doc->getElementsByTagName('meta') as $meta_dom) {
+            if ($meta_dom->getAttribute('name') == 'created') {
+                $record->created_at = $meta_dom->getAttribute('content');
+            }
+        }
+        file_put_contents("tmp.html", $content);
         foreach ($doc->getElementsByTagName('p') as $p_dom) {
             if (strpos(trim($p_dom->nodeValue), '院總第') === 0) {
                 $tr_dom = $p_dom->parentNode;
