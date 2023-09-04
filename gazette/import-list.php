@@ -66,7 +66,7 @@ foreach ($list_files as $file) {
         // {"comYear":"112","comVolume":"21","comBookId":"01","term":"10","sessionPeriod":"07","sessionTimes":"01","meetingTimes":"null","agendaNo":"1","agendaType":"1","meetingDate":"1120217","subject":"\u5831\u544a\u4e8b\u9805","pageStart":"     1","pageEnd":"     9","docUrl":"https:\/\/ppg.ly.gov.tw\/ppg\/download\/communique1\/work\/112\/21\/LCIDC01_1122101_00002.doc","selectTerm":"1007"}
         $agenda['pageStart'] = trim($agenda['pageStart']);
         $agenda['pageEnd'] = trim($agenda['pageEnd']);
-        $agenda['meetintDate'] = $get_meetingdate($agenda);
+        $agenda['meetingDate'] = $get_meetingdate($agenda);
 
         foreach (['comYear', 'comVolume', 'comBookId', 'term', 'sessionPeriod', 'sessionTimes', 'meetingTimes', 'agendaNo', 'agendaType', 'pageStart', 'pageEnd'] as $c) {
             try {
